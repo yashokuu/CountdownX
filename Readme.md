@@ -1,4 +1,4 @@
-[Image](https://raw.githubusercontent.com/siyam-yas/data/refs/heads/main/Pasted%20image.png)
+![cute](https://raw.githubusercontent.com/siyam-yas/data/refs/heads/main/Pasted%20image.png)
 
 # CountdownX
 CountdownX is a simple and adorable countdown timer application. It allows you to set a countdown timer in a cute way using HTML.
