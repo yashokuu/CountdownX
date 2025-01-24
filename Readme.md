@@ -1,5 +1,5 @@
 
-# CountdownXYZ
+# CountdownX
 CountdownX is a simple and adorable countdown timer application. It allows you to set a countdown timer in a cute way using HTML.
 
 ## Features
@@ -9,7 +9,7 @@ CountdownX is a simple and adorable countdown timer application. It allows you t
 - Redirection support
 
 ## Preview 
-- Github Page: {}
+- Github Page: [CountdownX Demo](https://siyam-yas.github.io/CountdownX/)
 
 ## Contributing
 
