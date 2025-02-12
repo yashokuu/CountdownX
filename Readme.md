@@ -10,7 +10,7 @@ CountdownX is a simple and adorable countdown timer application. It allows you t
 - Redirection support
 
 ## Preview 
-- Github Page: [CountdownX Demo](https://siyam-yas.github.io/CountdownX/)
+- Github Page: [CountdownX Demo](https://yashokuu.github.io/CountdownX/)
 
 ## Contributing
 
