@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Countdown</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Pacifico&family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&family=Nunito:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #90EE90, #98FB98, #ADFF2F, #7FFF00);
+            /* Spring colors */
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            overflow: hidden;
+            color: #333;
+            /* Darker text for contrast */
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Softer shadow */
+            animation: fadeInDown 1.5s ease-out;
+            color: #333;
+        }
+
+        .quote-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 1s forwards;
+        }
+
+        .quote {
+            font-family: 'Comic Neue', cursive;
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .author {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.8);
+            /* Lighter background */
+            backdrop-filter: blur(12px);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            animation: float 6s ease-in-out infinite, fadeIn 1.5s ease-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(1deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flip {
+            0% {
+                transform: rotateX(0);
+            }
+
+            100% {
+                transform: rotateX(360deg);
+            }
+        }
+
+        .timer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 110px;
+            padding: 1.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .time-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .time-block:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .time-block:hover::before {
+            opacity: 1;
+        }
+
+        .number {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 3.5rem;
+            color: #333;
+            /* Darker number color */
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
+            margin-bottom: 0.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .number.changed {
+            animation: flip 0.5s ease-out;
+        }
+
+        .label {
+            font-family: 'Comic Neue', cursive;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: #333;
+            /* Darker label color */
+            font-weight: 700;
+        }
+
+        /* Flower and Butterfly Effects */
+        .petal-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: hsl(300, 100%, 50%);
+            /* Pink petals */
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(110vh) translateX(150px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .butterfly-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .butterfly {
+            position: absolute;
+            font-size: 2rem;
+            animation: butterfly-flight 15s ease-in-out infinite;
+            top: 100vh;
+            /* Start completely off-screen at the bottom */
+        }
+
+        @keyframes butterfly-flight {
+            0% {
+                transform: translateY(0);
+                /* Start from their initial position (100vh) */
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-110vh) translateX(100px) rotate(720deg);
+            }
+        }
+
+        .spring-emoji {
+            font-size: 3rem;
+            margin-top: 1rem;
+            animation: bounce 2s ease infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.9rem;
+            font-family: 'Comic Neue', cursive;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 2s forwards;
+        }
+
+        @media (max-width: 768px) {
+            .timer {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .time-block {
+                min-width: 130px;
+            }
+
+            .number {
+                font-size: 2.5rem;
+            }
+
+            .countdown-container {
+                padding: 2rem;
+            }
+
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .quote {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="petal-container" id="petal-container"></div>
+    <div class="butterfly-container" id="butterfly-container"></div>
+
+    <div class="page-container">
+        <h1 class="title">Spring Countdown!</h1>
+
+        <div class="quote-container">
+            <p class="quote">"Spring adds new life and new beauty to all that is." </p>
+            <p class="author">— Jessica Harrelson </p>
+        </div>
+
+        <div class="countdown-container">
+            <div class="timer">
+                <div class="time-block" data-delay="0">
+                    <span class="number" id="days">00</span>
+                    <span class="label">Days</span>
+                </div>
+                <div class="time-block" data-delay="200">
+                    <span class="number" id="hours">00</span>
+                    <span class="label">Hours</span>
+                </div>
+                <div class="time-block" data-delay="400">
+                    <span class="number" id="minutes">00</span>
+                    <span class="label">Minutes</span>
+                </div>
+                <div class="time-block" data-delay="600">
+                    <span class="number" id="seconds">00</span>
+                    <span class="label">Seconds</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🌸 Counting down to the first day of Spring! 💐</p>
+        </div>
+    </div>
+
+    <script>
+        // Create petal elements
+        const petalContainer = document.getElementById('petal-container');
+        const petalCount = 100;
+
+        for (let i = 0; i < petalCount; i++) {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+
+            // Randomize petal properties
+            const size = Math.random() * 8 + 5;
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size}px`;
+            petal.style.left = `${Math.random() * 100}%`;
+
+            // Randomize petal color
+            const hue = Math.random() * 60 + 240; // Range for pink/purple hues
+            petal.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+
+            // Make some petals slightly transparent
+            petal.style.opacity = Math.random() * 0.5 + 0.3;
+
+            // Different speeds for different sizes (smaller falls slower)
+            const duration = Math.random() * 10 + 10;
+            petal.style.animationDuration = `${duration}s`;
+
+            // Different start times
+            petal.style.animationDelay = `${Math.random() * 10}s`;
+
+            petalContainer.appendChild(petal);
+        }
+
+        // Create butterfly elements
+        const butterflyContainer = document.getElementById('butterfly-container');
+        const butterflyEmojis = ["🦋", "🌸", "🌺", "🌼"];
+        const butterflyCount = 15;
+
+        for (let i = 0; i < butterflyCount; i++) {
+            const butterfly = document.createElement('div');
+            butterfly.classList.add('butterfly');
+
+            // Select random emoji
+            const randomEmoji = butterflyEmojis[Math.floor(Math.random() * butterflyEmojis.length)];
+            butterfly.textContent = randomEmoji;
+
+            // Randomize position
+            butterfly.style.left = `${Math.random() * 100}%`;
+
+            // Different speeds
+            const duration = Math.random() * 20 + 15;
+            butterfly.style.animationDuration = `${duration}s`;
+
+            // Different start times
+            butterfly.style.animationDelay = `${Math.random() * 15}s`;
+
+            butterflyContainer.appendChild(butterfly);
+        }
+
+        // Add staggered animation to time blocks
+        document.querySelectorAll('.time-block').forEach(block => {
+            const delay = parseInt(block.getAttribute('data-delay'));
+            block.style.animationDelay = `${delay}ms`;
+        });
+
+        // Target date - First day of Spring (example: March 20, 2025)
+        const targetDate = new Date("2025-03-20T00:00:00");
+
+        // Previous values for animation trigger
+        let prevDays, prevHours, prevMinutes, prevSeconds;
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                // Spring celebration
+                document.body.innerHTML = `
+                    <div style="text-align: center; animation: fadeIn 2s ease-out;">
+                        <h1 style="font-family: 'Pacifico', cursive; font-size: 5rem; margin-bottom: 2rem; animation: pulse 2s infinite;">Happy Spring!</h1>
+                        <p style="font-family: 'Comic Neue', cursive; font-size: 1.5rem; margin-bottom: 3rem;">Spring has sprung! 🌷</p>
+                        <div style="font-size: 5rem; margin: 2rem;">🌸 💐 🦋 🌷</div>
+                        <div style="margin-top: 2rem;">
+                            <button onclick="location.reload()" style="font-family: 'Bubblegum Sans', cursive; padding: 1rem 2rem; background: white; color: #7FFF00; border: none; border-radius: 50px; font-size: 1.2rem; cursor: pointer;">Start Over</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            // Update with animation if values changed
+            updateTimeBlock("days", days, prevDays);
+            updateTimeBlock("hours", hours, prevHours);
+            updateTimeBlock("minutes", minutes, prevMinutes);
+            updateTimeBlock("seconds", seconds, prevSeconds);
+
+            // Store current values for next comparison
+            prevDays = days;
+            prevHours = hours;
+            prevMinutes = minutes;
+            prevSeconds = seconds;
+        }
+
+        function updateTimeBlock(id, newValue, prevValue) {
+            const element = document.getElementById(id);
+            const formattedValue = String(newValue).padStart(2, "0");
+
+            element.textContent = formattedValue;
+
+            // Add animation if value changed
+            if (prevValue !== undefined && prevValue !== newValue) {
+                element.classList.remove("changed");
+                void element.offsetWidth; // Trigger reflow
+                element.classList.add("changed");
+            }
+        }
+
+        // Initial update
+        updateCountdown();
+
+        // Update every second
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+
+</html>
